@@ -1,3 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using SFR;
 
-Console.WriteLine("Hello, World!");
+// WillhabenClient willClient = new WillhabenClient();
+// var data = await willClient.GetAdverts();
+
+var producer = new ProducerService();
+await producer.Produce();
+
+var consumer = new ConsumerService();
+consumer.Consume();
