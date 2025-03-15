@@ -2,7 +2,7 @@
 using SFR.Models;
 using SFR.Serialisation;
 
-namespace SFR.Infrastructure
+namespace SFR.Infrastructure.Consumer
 {
     public class MultiTopicConsumer
     {

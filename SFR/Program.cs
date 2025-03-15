@@ -1,4 +1,5 @@
-﻿using SFR.Infrastructure;
+﻿
+using SFR.Infrastructure.Consumer;
 using SFR.Infrastructure.Producer;
 using SFR.Services.Implementations;
 
