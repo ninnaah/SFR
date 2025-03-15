@@ -2,7 +2,7 @@
 using SFR.Models;
 using SFR.Serialisation;
 
-namespace SFR;
+namespace SFR.Infrastructure;
 
 public class ProducerService
 {
