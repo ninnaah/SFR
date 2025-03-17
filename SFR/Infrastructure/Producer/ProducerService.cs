@@ -24,11 +24,11 @@ public class ProducerService
             var message = new Message<string, ClothingAd>
             {
                 Key = i.ToString(),
-                Value = new ClothingAd("a nice tshirt", 15.99, "Perfect condition")
+                //Value = new ClothingAd("a nice tshirt", 15.99, "Perfect condition")
             };
             var result = await producer.ProduceAsync("clothing-ad", message);
         
-            Console.WriteLine($"Produced Clothing Ad: {message.Key} - {result.Message.Value.Name}");
+            //Console.WriteLine($"Produced Clothing Ad: {message.Key} - {result.Message.Value.Name}");
         }
     }
 }

@@ -10,6 +10,14 @@ import java.util.Properties;
 
 public class StreamProcessorApp {
 
+    /**
+     * Fragen:
+     * Wo sollte man das Objekt mappen?
+     * Wo erstelle ich mir die neuen Objekte?
+     * AVRO verwenden, damit mans mal gesehen hat oder ist json auch in Ordnung? -> AVRO nutzen
+     *
+     */
+
     // DOKU: https://kafka.apache.org/documentation/streams/
     private static final Logger logger = LoggerFactory.getLogger(StreamProcessorApp.class);
 

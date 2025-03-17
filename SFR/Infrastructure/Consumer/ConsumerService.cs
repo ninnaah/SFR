@@ -62,7 +62,7 @@ namespace SFR.Infrastructure.Consumer
                 if (sellpyResult != null)
                 {
                     var item = sellpyResult.Message.Value;
-                    Console.WriteLine($"[Sellpy] Key: {sellpyResult.Message.Key} - Headline: {item.Headline} - Status: {item.ItemStatus}");
+                    Console.WriteLine($"[Sellpy] Key: {sellpyResult.Message.Key} - Headline: {item.Headline} - Status: {item.Price}");
                 }
             }
         }

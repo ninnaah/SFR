@@ -15,7 +15,7 @@ namespace SFR.Infrastructure.Producer
         }
 
         public async Task Produce(int messageCount = 10, string topicName = "willhaben-items")
-        {
+        { 
             Console.WriteLine($"Producing {messageCount} Willhaben Items...");
 
             var producerConfig = new ProducerConfig
