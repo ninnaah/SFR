@@ -1,41 +1,9 @@
 ﻿namespace SFR.Models
 {
+    // ML TODO: @Nina deine ClothingAd ist jetzt ein ClothingAdAvro geworden
     public class ClothingAd
     {
-        public ClothingAd(
-            string id,
-            string title,
-            string description,
-            double price,
-            string currency,
-            string category,
-            string size,
-            List<string> color,
-            List<string> material,
-            string condition,
-            string sellerId,
-            string location,
-            List<string> photoUrls,
-            DateTime publishedAt,
-            string source
-        )
-        {
-            Id = id;
-            Title = title;
-            Description = description;
-            Price = price;
-            Currency = currency;
-            Category = category;
-            Size = size;
-            Color = color ?? new List<string>();
-            Material = material ?? new List<string>();
-            Condition = condition;
-            SellerId = sellerId;
-            Location = location;
-            PhotoUrls = photoUrls ?? new List<string>();
-            PublishedAt = publishedAt;
-            Source = source;
-        }
+        public ClothingAd() {}
 
         public string Id { get; set; }               // Eindeutige ID
         public string Title { get; set; }            // Titel des Artikels
