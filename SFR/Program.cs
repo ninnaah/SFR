@@ -1,7 +1,7 @@
-﻿
-using SFR.Infrastructure.Consumer;
+﻿using SFR.Infrastructure.Consumer;
 using SFR.Infrastructure.Producer;
 using SFR.Services.Implementations;
+using SFR.Configuration;
 
 namespace SFR;
 
@@ -17,9 +17,10 @@ public static class Program
         var vintedProducer = new VintedProducerService(vintedMock);
         var sellpyProducer = new SellpyProducerService(sellpyMock);
 
-        await willhabenProducer.Produce(10, "willhaben-items");
-        await vintedProducer.Produce(10, "vinted-items");
-        await sellpyProducer.Produce(10, "sellpy-items");
+        // Einheitliches Avro-Topic nutzen
+        await willhabenProducer.Produce(KafkaSettings.DefaultMessageCount, KafkaSettings.ClothingAdAvroTopic);
+        await vintedProducer.Produce(KafkaSettings.DefaultMessageCount, KafkaSettings.ClothingAdAvroTopic);
+        await sellpyProducer.Produce(KafkaSettings.DefaultMessageCount, KafkaSettings.ClothingAdAvroTopic);
 
         var consumer = new MultiTopicConsumer();
         consumer.Consume();

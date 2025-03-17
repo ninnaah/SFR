@@ -1,30 +1,32 @@
-using SFR.Models;
+
+using SFR.AvroModels.V1;
 
 namespace SFR.Models.Mapper
 {
     public static class VintedItemMapper
     {
-        public static ClothingAd ToClothingAd(VintedItem item)
+        public static ClothingAdAvro ToClothingAdAvro(VintedItem item)
         {
             if (item == null) return null;
 
-            return new ClothingAd(
-                id: item.ItemReference,
-                title: item.Title,
-                description: item.Description,
-                price: item.Price,
-                currency: item.Currency,
-                category: item.CatalogId.ToString(), // Du kannst hier eine Mapping-Logik einbauen
-                size: item.SizeId.ToString(), // Evtl. Mapping zu Größe
-                color: item.ColorIds.Select(id => id.ToString()).ToList(), // Evtl. Mapping zu Farben
-                material: new List<string>(), // Vinted liefert hier keine Info
-                condition: item.StatusId.ToString(), // Evtl. Mapping zu "Neu", "Gebraucht", ...
-                sellerId: "Unbekannt", // Kein SellerId im VintedItem
-                location: "Unbekannt", // Kein Standort im VintedItem
-                photoUrls: item.PhotoUrls,
-                publishedAt: DateTime.UtcNow, // Keine Info → Standardwert
-                source: "Vinted"
-            );
+            return new ClothingAdAvro
+            {
+                Id = item.ItemReference,
+                Title = item.Title,
+                Description = item.Description,
+                Category = item.CatalogId.ToString(), // Optional: Mapping Katalog-ID zu Kategorie-Name
+                Condition = item.StatusId.ToString(), // Optional: Mapping Status-ID zu Beschreibung
+                Size = item.SizeId.ToString(), // Optional: Mapping Größe
+                Color = item.ColorIds?.Select(id => id.ToString()).ToList() ?? new List<string>(),
+                Material = new List<string>(), // Keine Materialdaten vorhanden
+                Price = item.Price,
+                Currency = item.Currency ?? "EUR",
+                Location = "Unbekannt", // Keine Location in VintedItem
+                SellerId = "Unbekannt", // Keine SellerId in VintedItem
+                PhotoUrls = item.PhotoUrls ?? new List<string>(),
+                PublishedAt = DateTime.UtcNow.ToString("o"), // Kein Datum → aktuelles Datum
+                Source = "Vinted"
+            };
         }
     }
 }

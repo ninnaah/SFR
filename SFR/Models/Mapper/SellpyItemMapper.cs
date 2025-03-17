@@ -1,30 +1,34 @@
-using SFR.Models;
+using SFR.AvroModels.V1;
 
-    public static class SellpyItemToClothingAdMapper
+namespace SFR.Models.Mapper
+{
+    public static class SellpyItemMapper
     {
-        public static ClothingAd Map(SellpyItem sellpyItem)
+        public static ClothingAdAvro ToClothingAdAvro(SellpyItem sellpyItem)
         {
             if (sellpyItem == null)
             {
                 return null;
             }
 
-            return new ClothingAd(
-                id: sellpyItem.ObjectId,
-                title: sellpyItem.Headline,
-                description: sellpyItem.Description,
-                price: sellpyItem.Price,
-                currency: sellpyItem.Currency ?? "EUR",
-                category: sellpyItem.Category,
-                size: sellpyItem.Size,
-                color: sellpyItem.Colors ?? new List<string>(),
-                material: sellpyItem.Materials ?? new List<string>(),
-                condition: sellpyItem.Condition,
-                sellerId: sellpyItem.SellerId,
-                location: sellpyItem.Location,
-                photoUrls: sellpyItem.PhotoUrls ?? new List<string>(),
-                publishedAt: sellpyItem.CreatedAt,
-                source: "Sellpy"
-            );
+            return new ClothingAdAvro
+            {
+                Id = sellpyItem.ObjectId,
+                Title = sellpyItem.Headline,
+                Description = sellpyItem.Description,
+                Category = sellpyItem.Category ?? "Unbekannt",
+                Condition = sellpyItem.Condition ?? "Unbekannt",
+                Size = sellpyItem.Size ?? "Unbekannt",
+                Color = sellpyItem.Colors ?? new List<string>(),
+                Material = sellpyItem.Materials ?? new List<string>(),
+                Price = sellpyItem.Price,
+                Currency = sellpyItem.Currency ?? "EUR",
+                Location = sellpyItem.Location ?? "Unbekannt",
+                SellerId = sellpyItem.SellerId ?? "Unbekannt",
+                PhotoUrls = sellpyItem.PhotoUrls ?? new List<string>(),
+                PublishedAt = sellpyItem.CreatedAt.ToString("o"),
+                Source = "Sellpy"
+            };
         }
     }
+}

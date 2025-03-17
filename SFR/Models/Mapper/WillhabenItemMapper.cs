@@ -1,28 +1,31 @@
+using SFR.AvroModels.V1;
+
 namespace SFR.Models.Mapper
 {
     public static class WillhabenItemMapper
     {
-        public static ClothingAd ToClothingAd(WillhabenItem item)
+        public static ClothingAdAvro ToClothingAdAvroV1(WillhabenItem item)
         {
             if (item == null) return null;
 
-            return new ClothingAd(
-                id: item.Id,
-                title: item.Title,
-                description: item.Description,
-                price: double.TryParse(item.Price, out var parsedPrice) ? parsedPrice : 0.0,
-                currency: item.Currency,
-                category: item.Category,
-                size: "Unbekannt", // WillhabenItem hat kein direktes Size-Feld für Kleidung
-                color: new List<string> { "Unbekannt" }, // Hier fehlt Farbe im Item → Platzhalter
-                material: new List<string> { "Unbekannt" }, // Hier fehlt Material im Item → Platzhalter
-                condition: item.Condition,
-                sellerId: item.SellerId,
-                location: item.Address2 ?? item.Location,
-                photoUrls: item.PhotoUrls,
-                publishedAt: item.PublishedAt,
-                source: "Willhaben"
-            );
+            return new ClothingAdAvro
+            {
+                Id = item.Id,
+                Title = item.Title,
+                Description = item.Description,
+                Category = item.Category,
+                Condition = item.Condition,
+                Size = "Unbekannt", // Kein Feld in Willhaben → default
+                Color = new List<string> { "Unbekannt" },
+                Material = new List<string> { "Unbekannt" },
+                Price = double.TryParse(item.Price, out var parsedPrice) ? parsedPrice : 0.0,
+                Currency = item.Currency,
+                Location = item.Address2 ?? item.Location,
+                SellerId = item.SellerId,
+                PhotoUrls = item.PhotoUrls ?? new List<string>(),
+                PublishedAt = item.PublishedAt.ToString("o"),
+                Source = "Willhaben"
+            };
         }
     }
 }
