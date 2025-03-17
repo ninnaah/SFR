@@ -1,6 +1,9 @@
 ﻿using Confluent.Kafka;
-using SFR.Models;
-using SFR.Serialisation;
+using Confluent.Kafka.SyncOverAsync;
+using Confluent.SchemaRegistry;
+using Confluent.SchemaRegistry.Serdes;
+using SFR.AvroModels.V1;
+using SFR.Configuration;
 
 namespace SFR.Infrastructure.Consumer
 {
@@ -8,62 +11,38 @@ namespace SFR.Infrastructure.Consumer
     {
         public void Consume()
         {
-            Console.WriteLine("Starting Multi-Topic Consumer...");
+            Console.WriteLine("🚀 Starting Avro Consumer...");
 
-            var config = new ConsumerConfig
+            var consumerConfig = new ConsumerConfig
             {
-                BootstrapServers = "localhost:29092",
-                GroupId = "multi-topic-consumer-group",
+                BootstrapServers = KafkaSettings.BootstrapServers,
+                GroupId = "clothing-ad-consumer-group",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            // Consumer für Willhaben Items
-            using var willhabenConsumer = new ConsumerBuilder<string, WillhabenItem>(config)
-                .SetValueDeserializer(new JsonDeserializer<WillhabenItem>())
+            var schemaRegistryConfig = new SchemaRegistryConfig
+            {
+                Url = KafkaSettings.SchemaRegistryUrl
+            };
+
+            using var schemaRegistry = new CachedSchemaRegistryClient(schemaRegistryConfig);
+
+            using var consumer = new ConsumerBuilder<string, ClothingAdAvro>(consumerConfig)
+                .SetValueDeserializer(new AvroDeserializer<ClothingAdAvro>(schemaRegistry).AsSyncOverAsync())
                 .Build();
 
-            // Consumer für Vinted Items
-            using var vintedConsumer = new ConsumerBuilder<string, VintedItem>(config)
-                .SetValueDeserializer(new JsonDeserializer<VintedItem>())
-                .Build();
+            consumer.Subscribe(KafkaSettings.ClothingAdAvroTopic);
 
-            // Consumer für Sellpy Items
-            using var sellpyConsumer = new ConsumerBuilder<string, SellpyItem>(config)
-                .SetValueDeserializer(new JsonDeserializer<SellpyItem>())
-                .Build();
-
-            // Subscribe to topics
-            willhabenConsumer.Subscribe("willhaben-items");
-            vintedConsumer.Subscribe("vinted-items");
-            sellpyConsumer.Subscribe("sellpy-items");
-
-            Console.WriteLine("Subscribed to all topics. Listening...");
+            Console.WriteLine($"✅ Subscribed to topic: {KafkaSettings.ClothingAdAvroTopic}");
 
             while (true)
             {
-                // Consume Willhaben Item
-                var willhabenResult = willhabenConsumer.Consume(TimeSpan.FromMilliseconds(100));
-                if (willhabenResult != null)
-                {
-                    var item = willhabenResult.Message.Value;
-                    Console.WriteLine($"[Willhaben] Key: {willhabenResult.Message.Key} - Title: {item.Title} - Location: {item.Address4}");
-                }
+                var result = consumer.Consume();
+                var ad = result?.Message?.Value;
 
-                // Consume Vinted Item
-                var vintedResult = vintedConsumer.Consume(TimeSpan.FromMilliseconds(100));
-                if (vintedResult != null)
-                {
-                    var item = vintedResult.Message.Value;
-                    Console.WriteLine($"[Vinted] Key: {vintedResult.Message.Key} - Title: {item.Title} - Price: {item.Price}");
-                }
+                if (ad == null) continue;
 
-                // Consume Sellpy Item
-                var sellpyResult = sellpyConsumer.Consume(TimeSpan.FromMilliseconds(100));
-                if (sellpyResult != null)
-                {
-                    var item = sellpyResult.Message.Value;
-                    Console.WriteLine($"[Sellpy] Key: {sellpyResult.Message.Key} - Headline: {item.Headline} - Status: {item.Price}");
-                }
+                Console.WriteLine($"🛒 [{ad.Source}] {ad.Title} ({ad.Category}) - {ad.Price} {ad.Currency}");
             }
         }
     }
