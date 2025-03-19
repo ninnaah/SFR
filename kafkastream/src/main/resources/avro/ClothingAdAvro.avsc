@@ -1,0 +1,22 @@
+{
+  "type": "record",
+  "namespace": "com.sfr.avro",
+  "name": "ClothingAdAvro",
+  "fields": [
+    { "name": "id", "type": "string" },
+    { "name": "title", "type": "string" },
+    { "name": "description", "type": "string" },
+    { "name": "category", "type": "string" },
+    { "name": "condition", "type": "string" },
+    { "name": "size", "type": "string" },
+    { "name": "color", "type": { "type": "array", "items": "string" } },
+    { "name": "material", "type": { "type": "array", "items": "string" } },
+    { "name": "price", "type": "double" },
+    { "name": "currency", "type": "string" },
+    { "name": "location", "type": "string" },
+    { "name": "sellerId", "type": "string" },
+    { "name": "photoUrls", "type": { "type": "array", "items": "string" } },
+    { "name": "publishedAt", "type": "string" },
+    { "name": "source", "type": "string" }
+  ]
+}
