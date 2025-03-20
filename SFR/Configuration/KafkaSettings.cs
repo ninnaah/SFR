@@ -6,6 +6,7 @@ namespace SFR.Configuration
         public const string SchemaRegistryUrl = "http://localhost:8081";
 
         public const string ClothingAdAvroTopic = "clothing-ad-avro";
+        public const string CategoryCountTopic = "category-counts";
         public const int DefaultMessageCount = 10;
     }
 }

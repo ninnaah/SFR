@@ -11,12 +11,12 @@ namespace SFR.Infrastructure.Consumer
     {
         public void Consume()
         {
-            Console.WriteLine("🚀 Starting Avro Consumer...");
+            Console.WriteLine("🚀 Starting Avro Multi-Topic Consumer...");
 
             var consumerConfig = new ConsumerConfig
             {
                 BootstrapServers = KafkaSettings.BootstrapServers,
-                GroupId = "clothing-ad-consumer-group",
+                GroupId = "multi-topic-consumer-group",
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
@@ -27,23 +27,49 @@ namespace SFR.Infrastructure.Consumer
 
             using var schemaRegistry = new CachedSchemaRegistryClient(schemaRegistryConfig);
 
-            using var consumer = new ConsumerBuilder<string, ClothingAdAvro>(consumerConfig)
+            // Consumer für ClothingAdAvro
+            using var adConsumer = new ConsumerBuilder<string, ClothingAdAvro>(consumerConfig)
                 .SetValueDeserializer(new AvroDeserializer<ClothingAdAvro>(schemaRegistry).AsSyncOverAsync())
                 .Build();
 
-            consumer.Subscribe(KafkaSettings.ClothingAdAvroTopic);
+            // Consumer für Category Counts (key = string, value = long)
+            using var countConsumer = new ConsumerBuilder<string, long>(consumerConfig)
+                .SetValueDeserializer(Deserializers.Int64)
+                .Build();
 
-            Console.WriteLine($"✅ Subscribed to topic: {KafkaSettings.ClothingAdAvroTopic}");
+            adConsumer.Subscribe(KafkaSettings.ClothingAdAvroTopic);
+            countConsumer.Subscribe(KafkaSettings.CategoryCountTopic);
 
+            Console.WriteLine($"✅ Subscribed to topics:");
+            Console.WriteLine($"- {KafkaSettings.ClothingAdAvroTopic}");
+            Console.WriteLine($"- {KafkaSettings.CategoryCountTopic}");
+
+            // Event Loop
             while (true)
             {
-                var result = consumer.Consume();
-                var ad = result?.Message?.Value;
-
-                if (ad == null) continue;
-
-                Console.WriteLine($"🛒 [{ad.Source}] {ad.Title} ({ad.Category}) - {ad.Price} {ad.Currency}");
+                ConsumeAd(adConsumer);
+                ConsumeCategoryCount(countConsumer);
             }
+        }
+
+        private void ConsumeAd(IConsumer<string, ClothingAdAvro> consumer)
+        {
+            var result = consumer.Consume(TimeSpan.FromMilliseconds(100));
+
+            if (result?.Message?.Value == null) return;
+
+            var ad = result.Message.Value;
+
+            Console.WriteLine($"🛒 [{ad.Source}] {ad.Title} ({ad.Category}) - {ad.Price} {ad.Currency}");
+        }
+
+        private void ConsumeCategoryCount(IConsumer<string, long> consumer)
+        {
+            var result = consumer.Consume(TimeSpan.FromMilliseconds(100));
+
+            if (result?.Message == null) return;
+
+            Console.WriteLine($"📊 Category Count | Category: {result.Message.Key} | Count: {result.Message.Value}");
         }
     }
 }
