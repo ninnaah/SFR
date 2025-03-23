@@ -1,6 +1,6 @@
 {
   "type": "record",
-  "namespace": "com.sfr.avro",
+  "namespace": "SFR.AvroModels.V1",
   "name": "ClothingAdAvro",
   "fields": [
     { "name": "id", "type": "string" },

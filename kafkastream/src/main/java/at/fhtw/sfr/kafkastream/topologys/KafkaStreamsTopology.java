@@ -1,8 +1,8 @@
 package at.fhtw.sfr.kafkastream.topologys;
 
+import SFR.AvroModels.V1.ClothingAdAvro;
 import at.fhtw.sfr.kafkastream.constants.Topics;
 import at.fhtw.sfr.kafkastream.serdes.SerdesUtils;
-import com.sfr.avro.ClothingAdAvro;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.StreamsBuilder;
@@ -14,6 +14,8 @@ import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static java.lang.ProcessBuilder.Redirect.to;
 
 public class KafkaStreamsTopology {
 
@@ -27,6 +29,7 @@ public class KafkaStreamsTopology {
                 .stream(Topics.CLOTHING_AD_INPUT_TOPIC, Consumed.with(Serdes.String(), SerdesUtils.getValueSerdes()));
 
         stream
+                .peek((key, value) -> log.info("🔥 RECEIVED: key={}, value={}", key, value))
                 .groupBy(
                         (key, value) -> value.getCategory().toString(),
                         Grouped.with(Serdes.String(), SerdesUtils.getValueSerdes())
@@ -38,6 +41,7 @@ public class KafkaStreamsTopology {
                 )
                 .toStream()
                 .to(Topics.CATEGORY_COUNT_OUTPUT_TOPIC, Produced.with(Serdes.String(), Serdes.Long()));
+                //.to(Topics.CATEGORY_COUNT_OUTPUT_TOPIC, Produced.with(Serdes.String(), specificAvroSerde));
 
         log.info("Kafka Streams topology built successfully.");
         return stream;

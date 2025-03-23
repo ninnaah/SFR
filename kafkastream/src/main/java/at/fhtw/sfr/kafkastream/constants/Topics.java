@@ -4,7 +4,7 @@ package at.fhtw.sfr.kafkastream.constants;
 public final class Topics {
 
     // Input Topics
-    public static final String CLOTHING_AD_INPUT_TOPIC = "clothing-ad-input";
+    public static final String CLOTHING_AD_INPUT_TOPIC = "clothing-ad-avro";
 
     // Output Topics
     public static final String CATEGORY_COUNT_OUTPUT_TOPIC = "category-counts";

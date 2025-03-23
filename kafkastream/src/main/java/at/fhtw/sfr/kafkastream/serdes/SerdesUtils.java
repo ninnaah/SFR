@@ -1,14 +1,13 @@
 package at.fhtw.sfr.kafkastream.serdes;
 
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde;
-import lombok.Setter;
 import org.apache.avro.specific.SpecificRecord;
 
 import java.util.Map;
 
 /** Utility class for Serdes. */
 public class SerdesUtils {
-    @Setter
+
     private static Map<String, String> serdesConfig;
 
     /**
@@ -21,6 +20,10 @@ public class SerdesUtils {
         SpecificAvroSerde<T> serdes = new SpecificAvroSerde<>();
         serdes.configure(serdesConfig, false);
         return serdes;
+    }
+
+    public static void setSerdesConfig(Map<String, String> config) {
+        serdesConfig = config;
     }
 
     /** Private constructor. */
