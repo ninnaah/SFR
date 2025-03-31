@@ -2,13 +2,23 @@
 using Confluent.Kafka.SyncOverAsync;
 using Confluent.SchemaRegistry;
 using Confluent.SchemaRegistry.Serdes;
+using Microsoft.EntityFrameworkCore;
 using SFR.AvroModels.V1;
 using SFR.Configuration;
+using SFR.Infrastructure.Database;
+using SFR.Infrastructure.Database.Entities;
 
 namespace SFR.Infrastructure.Consumer
 {
     public class MultiTopicConsumer
     {
+        private DbContext _dbContext;
+
+        public MultiTopicConsumer(ApplicationDbContext dbContext)
+        {
+            this._dbContext = dbContext;
+        }
+
         public void Consume()
         {
             var consumerConfig = new ConsumerConfig

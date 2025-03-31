@@ -13,11 +13,17 @@ The adverts can be searched and filtered by various attributes, such as location
 
 ## Technologies
 - .NET 8 Backend
+- EF Core
 - Apache Kafka
 - Angular Frontend
 
 ## Kafka Setup
 Start Apache Kafka with docker-compose.yml
+
+## DB Setup
+- "dotnet tool install --global dotnet-ef" for installing dotnet-ef tools
+- "dotnet ef database update" for updating the database and adding migrations
+- Connection String in appsettings.json
 
 ### Cluster Overview
 - Brokers:
