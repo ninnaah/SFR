@@ -62,6 +62,17 @@ namespace SFR.Infrastructure.Consumer
 
             var ad = result.Message.Value;
             Console.WriteLine($"[{ad.Source}] {ad.Title} ({ad.Category}) - {ad.Price} {ad.Currency}");
+
+            _dbContext.Add(new ClothingAd()
+            {
+                Id = Guid.NewGuid().ToString(),
+                Source = ad.Source,
+                Title = ad.Title,
+                Category = ad.Category,
+                Price = ad.Price,
+                Currency = ad.Currency
+            });
+            _dbContext.SaveChanges();
         }
 
         private void ConsumeCategoryCount(IConsumer<string, long> consumer)
