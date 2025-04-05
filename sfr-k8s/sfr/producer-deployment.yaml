@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sfr-producer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sfr-producer
+  template:
+    metadata:
+      labels:
+        app: sfr-producer
+    spec:
+      containers:
+        - name: sfr-producer
+          image: sfr-app
+          env:
+            - name: KAFKA_BOOTSTRAP
+              value: "broker-1:19092"
+            - name: SCHEMA_REGISTRY_URL
+              value: "http://schema-registry:8081"
+          ports:
+            - containerPort: 80
