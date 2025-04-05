@@ -62,6 +62,7 @@ public static class Program
     {
         using var scope = host.Services.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        dbContext.Database.Migrate();
         var consumer = new MultiTopicConsumer(dbContext);
         consumer.Consume();
     }
