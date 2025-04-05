@@ -131,9 +131,28 @@
     depends_on:
       - broker-1
       - schema-registry
+      - postgres
     environment:
       - KAFKA_BOOTSTRAP=broker-1:19092
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=ClothingAd;Username=postgres;Password=mysecret
     command: [ "consumer" ]
     networks:
       - default
+  
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecret
+      POSTGRES_DB: ClothingAd
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - default
+
+volumes:
+  pgdata:
