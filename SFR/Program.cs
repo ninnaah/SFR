@@ -14,6 +14,12 @@ public static class Program
 {
     public static async Task Main(string[] args)
     {
+        if (args.Length == 0)
+        {
+            Console.WriteLine("Bitte 'producer' oder 'consumer' als Argument angeben.");
+            return;
+        }
+
         var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((context, services) =>
             {
@@ -22,7 +28,23 @@ public static class Program
                     options.UseNpgsql(connectionString));
             })
             .Build();
-        
+
+        switch (args[0].ToLower())
+        {
+            case "producer":
+                await RunProducers();
+                break;
+            case "consumer":
+                RunConsumer(host);
+                break;
+            default:
+                Console.WriteLine("Unbekannter Modus: " + args[0]);
+                break;
+        }
+    }
+
+    private static async Task RunProducers()
+    {
         var willhabenMock = new WillhabenItemMockService();
         var vintedMock = new VintedItemMockService();
         var sellpyMock = new SellpyItemMockService();
@@ -31,17 +53,16 @@ public static class Program
         var vintedProducer = new VintedProducerService(vintedMock);
         var sellpyProducer = new SellpyProducerService(sellpyMock);
 
-        // Einheitliches Avro-Topic nutzen
         await willhabenProducer.Produce(KafkaSettings.DefaultMessageCount, KafkaSettings.ClothingAdAvroTopic);
         await vintedProducer.Produce(KafkaSettings.DefaultMessageCount, KafkaSettings.ClothingAdAvroTopic);
         await sellpyProducer.Produce(KafkaSettings.DefaultMessageCount, KafkaSettings.ClothingAdAvroTopic);
+    }
 
-        using (var scope = host.Services.CreateScope())
-        {
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var consumer = new MultiTopicConsumer(dbContext);
-            consumer.Consume();
-        }
-        
+    private static void RunConsumer(IHost host)
+    {
+        using var scope = host.Services.CreateScope();
+        var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var consumer = new MultiTopicConsumer(dbContext);
+        consumer.Consume();
     }
 }
