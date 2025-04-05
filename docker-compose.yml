@@ -111,3 +111,29 @@
       - broker-1
       - broker-2
       - broker-3
+
+  sfr-producer:
+    image: sfr-app
+    container_name: sfr-producer
+    depends_on:
+      - broker-1
+      - schema-registry
+    environment:
+      - KAFKA_BOOTSTRAP=broker-1:19092
+      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+    command: [ "producer" ]
+    networks:
+      - default
+
+  sfr-consumer:
+    image: sfr-app
+    container_name: sfr-consumer
+    depends_on:
+      - broker-1
+      - schema-registry
+    environment:
+      - KAFKA_BOOTSTRAP=broker-1:19092
+      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
+    command: [ "consumer" ]
+    networks:
+      - default
