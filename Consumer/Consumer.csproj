@@ -11,4 +11,19 @@
       <ProjectReference Include="..\Shared\Shared.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Confluent.Kafka" Version="2.8.0" />
+      <PackageReference Include="Confluent.SchemaRegistry" Version="2.8.0" />
+      <PackageReference Include="Confluent.SchemaRegistry.Serdes.Avro" Version="2.8.0" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.3" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.3" />
+      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+    </ItemGroup>
+
 </Project>

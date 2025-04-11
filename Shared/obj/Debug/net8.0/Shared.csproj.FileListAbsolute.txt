@@ -1,0 +1,13 @@
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/bin/Debug/net8.0/Shared.deps.json
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/bin/Debug/net8.0/Shared.dll
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/bin/Debug/net8.0/Shared.pdb
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/Shared.csproj.AssemblyReference.cache
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/Shared.GeneratedMSBuildEditorConfig.editorconfig
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/Shared.AssemblyInfoInputs.cache
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/Shared.AssemblyInfo.cs
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/Shared.csproj.CoreCompileInputs.cache
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/Shared.sourcelink.json
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/Shared.dll
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/refint/Shared.dll
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/Shared.pdb
+/Users/carme/Library/Mobile Documents/com~apple~CloudDocs/Documents/Uni/FHTW/2_semester/sfr/development.nosync/SFR/Shared/obj/Debug/net8.0/ref/Shared.dll

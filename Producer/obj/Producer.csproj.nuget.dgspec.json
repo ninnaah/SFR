@@ -47,6 +47,20 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Confluent.Kafka": {
+              "target": "Package",
+              "version": "[2.8.0, )"
+            },
+            "Confluent.SchemaRegistry": {
+              "target": "Package",
+              "version": "[2.8.0, )"
+            },
+            "Confluent.SchemaRegistry.Serdes.Avro": {
+              "target": "Package",
+              "version": "[2.8.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -106,6 +120,12 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "Apache.Avro": {
+              "target": "Package",
+              "version": "[1.12.0, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",

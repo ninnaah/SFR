@@ -1,0 +1,26 @@
+Steps done 
+
+> kind installiert
+> kind create cluster --name sfr-cluster
+> checken obs rennt: kubectl cluster-info --context kind-sfr-cluster
+> Main aufgeteilt, so dass producer und consumer getrennt gestartet werden können 
+> Dockerfile erstellt
+> docker build -t sfr-app .
+> docker run --rm sfr-app producer
+> docker run --rm sfr-app consumer
+> dann festgestellt, dass ich im Container nicht mit localhost arbeiten kann -> kafkaseetings abgepasst
+> Docker neu gebaut
+
+> run dann so:
+
+docker run --rm \
+  --network sfr_default \
+  -e KAFKA_BOOTSTRAP=broker-1:19092 \
+  -e SCHEMA_REGISTRY_URL=http://schema-registry:8081 \
+  sfr-app consumer
+
+docker run --rm \
+  --network sfr_default \
+  -e KAFKA_BOOTSTRAP=broker-1:19092 \
+  -e SCHEMA_REGISTRY_URL=http://schema-registry:8081 \
+  sfr-app producer
