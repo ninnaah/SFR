@@ -14,14 +14,13 @@ spec:
     spec:
       containers:
         - name: sfr-consumer
-          image: sfr-app
+          image: sfr-consumer:dev # ← das hier!
+          ports:
+            - containerPort: 80
           env:
             - name: KAFKA_BOOTSTRAP
-              value: kafka-broker:19092
+              value: kafka:29092
             - name: SCHEMA_REGISTRY_URL
-              value: http://schema-registry:8081
-            - name: CONNECTION_STRING
-              value: "Host=postgres;Database=ClothingAd;Username=postgres;Password=mysecret"
-          command: [ "consumer" ]
-          ports:
-            - containerPort: 8080
+              value: http://host.docker.internal:8081
+            - name: ConnectionStrings__DefaultConnection
+              value: Host=postgres;Database=ClothingAd;Username=postgres;Password=mysecret

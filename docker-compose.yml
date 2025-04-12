@@ -44,7 +44,7 @@
       KAFKA_NODE_ID: 4
       KAFKA_PROCESS_ROLES: broker
       KAFKA_LISTENERS: 'PLAINTEXT://:19092,PLAINTEXT_HOST://:9092'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-1:19092,PLAINTEXT_HOST://localhost:29092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-1:19092,PLAINTEXT_HOST://host.docker.internal:29092'
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
@@ -55,6 +55,11 @@
       - controller-1
       - controller-2
       - controller-3
+    healthcheck:
+      test: ["CMD", "bash", "-c", "echo > /dev/tcp/localhost/19092"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   broker-2:
     image: apache/kafka:latest
@@ -65,7 +70,7 @@
       KAFKA_NODE_ID: 5
       KAFKA_PROCESS_ROLES: broker
       KAFKA_LISTENERS: 'PLAINTEXT://:19092,PLAINTEXT_HOST://:9092'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-2:19092,PLAINTEXT_HOST://localhost:39092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-2:19092,PLAINTEXT_HOST://host.docker.internal:39092'
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
@@ -86,7 +91,7 @@
       KAFKA_NODE_ID: 6
       KAFKA_PROCESS_ROLES: broker
       KAFKA_LISTENERS: 'PLAINTEXT://:19092,PLAINTEXT_HOST://:9092'
-      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-3:19092,PLAINTEXT_HOST://localhost:49092'
+      KAFKA_ADVERTISED_LISTENERS: 'PLAINTEXT://broker-3:19092,PLAINTEXT_HOST://host.docker.internal:49092'
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
@@ -122,14 +127,12 @@
         condition: service_healthy
       schema-registry:
         condition: service_healthy
-      sfr-consumer:
-        condition: service_started
     environment:
       - KAFKA_BOOTSTRAP=broker-1:19092
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
     networks:
       - default
-        
+
   kafkastream:
     build:
       context: ./kafkastream
@@ -141,38 +144,9 @@
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=broker-1:19092
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
 
-  sfr-consumer:
-    build:
-      context: .
-      dockerfile: Consumer/Dockerfile
-    container_name: sfr-consumer
-    depends_on:
-      broker-1:
-        condition: service_healthy
-      schema-registry:
-        condition: service_healthy
-      postgres:
-        condition: service_healthy
-    environment:
-      - KAFKA_BOOTSTRAP=broker-1:19092
-      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-      - ConnectionStrings__DefaultConnection=Host=postgres;Database=ClothingAd;Username=postgres;Password=mysecret
-    networks:
-      - default
-  
-  postgres:
-    image: postgres:15
-    container_name: postgres
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: mysecret
-      POSTGRES_DB: ClothingAd
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-    networks:
-      - default
+# in Kubernetes verlagert:
+# sfr-consumer:
+# postgres:
 
 volumes:
   pgdata:
