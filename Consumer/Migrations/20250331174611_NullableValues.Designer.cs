@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace SFR.Migrations
+namespace Consumer.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20250331174611_NullableValues")]
