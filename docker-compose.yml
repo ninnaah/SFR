@@ -113,30 +113,50 @@
       - broker-3
 
   sfr-producer:
-    image: sfr-app
+    build:
+      context: .
+      dockerfile: Producer/Dockerfile
     container_name: sfr-producer
     depends_on:
-      - broker-1
-      - schema-registry
+      broker-1:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+      sfr-consumer:
+        condition: service_started
     environment:
       - KAFKA_BOOTSTRAP=broker-1:19092
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
-    command: [ "producer" ]
     networks:
       - default
+        
+  kafkastream:
+    build:
+      context: ./kafkastream
+    container_name: kafkastream
+    depends_on:
+      broker-1:
+        condition: service_healthy
+    environment:
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=broker-1:19092
+      - SCHEMA_REGISTRY_URL=http://schema-registry:8081
 
   sfr-consumer:
-    image: sfr-app
+    build:
+      context: .
+      dockerfile: Consumer/Dockerfile
     container_name: sfr-consumer
     depends_on:
-      - broker-1
-      - schema-registry
-      - postgres
+      broker-1:
+        condition: service_healthy
+      schema-registry:
+        condition: service_healthy
+      postgres:
+        condition: service_healthy
     environment:
       - KAFKA_BOOTSTRAP=broker-1:19092
       - SCHEMA_REGISTRY_URL=http://schema-registry:8081
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=ClothingAd;Username=postgres;Password=mysecret
-    command: [ "consumer" ]
     networks:
       - default
   
